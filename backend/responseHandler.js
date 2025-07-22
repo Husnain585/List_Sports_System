@@ -12,6 +12,7 @@ module.exports = (res, response) => {
         return res.send({
             status: 400,
             error: error,
+            error: error.message || "An error occurred",
             data: {},
         })
     }

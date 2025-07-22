@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
+//  Context and Router imports
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { UserContextProvider } from "./contexts/UserContext";
-import Navbar from "./components/Navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// General Component imports
+import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Login from "./components/Login";
-import Profile from "./components/Profile";
-import Test from "./components/Test";
 import Register from "./components/Register";
+// User specific components
 import ParticipantDashboard from "./components/userComponents/ParticipantDashboard";
+// Admin specific components
 import AdminPanel from "./components/adminComponents/AdminPanel";
+// Coach specific components
 
 function App() {
   const [themeMode, setThemeMode] = useState(() => {

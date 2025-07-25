@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useTheme from "../contexts/ThemeContext";
 import useUser from "../contexts/UserContext";
 
 function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [img, setImg] = useState(null); // New state for upload logic
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
@@ -36,10 +38,37 @@ function Navbar() {
         break;
       case "logout":
         handleLogout();
-        redirect("/login");
         break;
       default:
         break;
+    }
+  };
+
+  const handleImageChange = async () => {
+    if (!img) {
+      alert("Please select an image first.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", img);
+
+    try {
+      const response = await fetch("http://localhost:3000/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const data = await response.json();
+      console.log("Server response:", data);
+      alert("Image uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image.");
     }
   };
 
@@ -61,7 +90,7 @@ function Navbar() {
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center space-x-2 text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors duration-200"
+            className="flex items-center space-x-2 font-semibold text-teal-700 dark:text-teal-300 hover:text-teal-500 dark:hover:text-teal-400 transition-colors duration-200"
           >
             <svg className="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
@@ -73,25 +102,24 @@ function Navbar() {
 
           {/* Right Controls */}
           <div className="flex items-center space-x-4">
-            
+
             {/* Theme Toggle */}
             <button
               onClick={toggleTheme}
               aria-label="Toggle Theme"
               className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-yellow-300 transition-colors duration-300"
             >
-                {themeMode === "light" ? (
-                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m8.66-8.66h-1M4.34 12h-1M15.36 17.95l-.71-.71M6.34 6.34l-.71-.71M18.36 18.36l-.71-.71M6.34 17.66l-.71-.71M12 7a5 5 0 100 10 5 5 0 000-10z" />
-                  </svg>
-                ) : (
-                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M21 12.79A9 9 0 0111.21 3a7 7 0 000 14 9 9 0 009.79-4.21z" />
-                  </svg>
-                )}
+              {themeMode === "light" ? (
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m8.66-8.66h-1M4.34 12h-1M15.36 17.95l-.71-.71M6.34 6.34l-.71-.71M18.36 18.36l-.71-.71M6.34 17.66l-.71-.71M12 7a5 5 0 100 10 5 5 0 000-10z" />
+                </svg>
+              ) : (
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M21 12.79A9 9 0 0111.21 3a7 7 0 000 14 9 9 0 009.79-4.21z" />
+                </svg>
+              )}
             </button>
 
-              
             {/* User Avatar */}
             {user ? (
               <div className="relative" ref={dropdownRef}>

@@ -12,6 +12,11 @@ import Register from "./components/Register";
 import ParticipantDashboard from "./components/userComponents/ParticipantDashboard";
 // Admin specific components
 import AdminPanel from "./components/adminComponents/AdminPanel";
+import CreateEvent from "./components/adminComponents/CreateEvent";
+import CoachPanel from "./components/coachComponents/CoachPanel";
+import ProfileCard from "./components/userComponents/uiComponents/ProfileCard";
+import Profile from "./components/userComponents/uiComponents/Profile";
+import ManageUser from "./components/adminComponents/ManageUser";
 // Coach specific components
 
 function App() {
@@ -39,7 +44,16 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/dashboard" element={<ParticipantDashboard />} />
+              {/* Admin specified Routr */}
               <Route path="/admin" element={<AdminPanel />} />
+              {/* <Route path="/admin/user-management" element={<ManageUser />} /> */}
+
+              <Route path="/admin/events" element={<CreateEvent />} />
+
+              {/* Coach specified Route */}
+              <Route path="/coach" element={<CoachPanel />} />
+              {/* Add more routes as needed */}
+              <Route path="/view-profile" element={<Profile />} />
             </Routes>
           </div>
         </Router>
